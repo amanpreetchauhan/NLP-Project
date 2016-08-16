@@ -11,8 +11,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 /**
  * 
  * @author Amanpreet
- * Dated : Aug 14, 2016
- * This class holds ist of sentences
+ * Dated : Aug 16, 2016
+ * This class holds list of sentences
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
