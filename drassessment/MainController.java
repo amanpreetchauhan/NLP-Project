@@ -1,6 +1,7 @@
 package drassessment;
 
 import java.util.Scanner;
+import java.util.Set;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import javax.xml.bind.JAXBException;
@@ -29,11 +30,18 @@ public class MainController {
     	// create instance of main class
     	Composer composer = new Composer();
     	
+    	//function to read file for proper nouns and store them in hashset
+    	Set<String> hSet = ProperNounPrinter.storeNouns();
+    	
+    	//printing the list of proper nouns occurring in text file
+    	ProperNounPrinter.printNouns(hSet, StringText);
+    	
     	//function to compose sentences and return object of SentenceHolder
-    	SentenceHolder sHolder = composer.composeSentences(StringText);
+    	SentenceHolder sHolder = composer.composeSentences(StringText, hSet);
     	
     	//printing XML representation of the java object
     	XmlRepresentation.printXml(sHolder, System.out);
+    	
     	
     	sc.close();
     }

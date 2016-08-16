@@ -16,6 +16,7 @@ public class XmlRepresentation {
 	//method to print XML representation of java class on Stdout
     public static void printXml(SentenceHolder sHolder, PrintStream pstream) throws JAXBException {
     	
+    	System.out.println("\nPrinting below the XML Representation of the Java Object : \n");
     	//passing an instance of SentenceHolder class
     	JAXBContext jContext = JAXBContext.newInstance(SentenceHolder.class);
     	

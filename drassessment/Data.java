@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * This class is an abstract class that represents any Alphabets or Symbols
  */
 @XmlTransient
-@XmlSeeAlso({ Alphabets.class, WhiteSpace.class, Punctuation.class })
+@XmlSeeAlso({ Alphabets.class, WhiteSpace.class, Punctuation.class, ProperNoun.class })
 public abstract class Data {
     String text;
     

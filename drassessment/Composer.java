@@ -2,11 +2,12 @@ package drassessment;
 
 import java.text.BreakIterator;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * 
  * @author Amanpreet
- * Dated : Aug 14, 2016
+ * Dated : Aug 15, 2016
  * This class composes all the sentences and underlying tokens 
  */
 public class Composer {
@@ -18,7 +19,7 @@ public class Composer {
     private BreakIterator breakTokens = BreakIterator.getWordInstance(Locale.US);  
 
     //function to take string text, break and compose into sentences and return SentenceHolder object
-    public SentenceHolder composeSentences(String StringText){
+    public SentenceHolder composeSentences(String StringText, Set<String>hSet){
     	
         //set and scan a new String 
         this.breakSentence.setText(StringText);
@@ -45,7 +46,7 @@ public class Composer {
                 String st = StringText.substring(pointer1 ,pointer2);
                 
                 //function to compose tokens and return object of DataHolder
-                DataHolder dHolder = composeTokens(st);
+                DataHolder dHolder = composeTokens(st, hSet);
                 
                 //adding tokens to sentence arraylist
                 sHolder.dataList.add(dHolder);
@@ -55,7 +56,7 @@ public class Composer {
     }    
 
     //function to take sentence, break and compose into tokens and return DataHolder object
-    DataHolder composeTokens(String StringText){
+    DataHolder composeTokens(String StringText, Set<String>hSet){
 
     	int pointer1, pointer2;
     	
@@ -72,25 +73,53 @@ public class Composer {
         //loop until we reach the last boundary
         while (pointer2 != BreakIterator.DONE) {
         	
+        	int flag = 0;
+        	
         	//get token between two pointers
             String token = StringText.substring(pointer1, pointer2);
+            //System.out.println(token);
             
             //getting first character of each token
             char ch = token.charAt(0);
             
-            //checking the first character
+            //checking for every token if it is present in hashset
             if(Character.isLetterOrDigit(ch))
             {
-            	//add new Alphabets object
-                dHolder.tokenList.add(new Alphabets(token) );
-            } 
+            	
+            	//checking if it is a proper noun	
+	            for(String str: hSet){
+	            	
+	            	if(ProperNounPrinter.isThere(str, token)){
+	            		
+	            		//add new Proper Noun object
+	                    dHolder.tokenList.add(new ProperNoun(token) );
+	                    
+	                    //move pointer1 to next
+	                    pointer1 = pointer2;
+	                    
+	                    //pointer2 should point to next boundary every time we loop
+	                    pointer2 = this.breakTokens.next();
+	                    flag = 1;
+	                    
+	                    break;
+	            		}
+	            	}
+	            
+		            if(flag == 0){
+		            //checking if it is a normal Alphabets object
+	                dHolder.tokenList.add(new Alphabets(token) );
+		            }
+
+            }
             
+            //else if it is a whitespace
             else if(ch == ' ') 
             {
             	//add new Symbols object
                 dHolder.tokenList.add(new WhiteSpace(token) );
             }
             
+            //else it is a punctuation
             else
             {
             	dHolder.tokenList.add(new Punctuation(token) );
@@ -101,9 +130,11 @@ public class Composer {
             
             //pointer2 should point to next boundary every time we loop
             pointer2 = this.breakTokens.next();
-        }
+     }
         
         //returning DataHolder instance
         return dHolder;
     }
+    
+    
 }
